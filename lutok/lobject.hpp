@@ -20,6 +20,8 @@
 #define LOBJECT_METHOD(METHODNAME, TYPEDEF) METHODNAME(lutok::state & state, TYPEDEF)
 #define LOBJECT_OPERATOR(OPERATORNAME, TYPEDEF) operator_##OPERATORNAME(lutok::state & state, TYPEDEF)
 
+#define thread_local __declspec(thread)
+
 namespace lutok {
 
 template <class C, typename T>
@@ -68,7 +70,7 @@ private:
 public:
 	static classWeakPtr getInstance(lutok::state & state){
 		assert((std::is_base_of<LObject, C>::value == true));
-		static classSharedPtr instance = nullptr;
+		thread_local static classSharedPtr instance = nullptr;
 		if (instance == nullptr){
 			instance = classSharedPtr(new C(state));
 		}

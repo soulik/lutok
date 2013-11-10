@@ -1,0 +1,7 @@
+﻿*.swp
+*.sdf
+*.opensdf
+Debug/*
+Release/*
+lutok/Debug/*
+lutok/Release/*

@@ -1,6 +1,4 @@
-﻿#include <lua/lua.hpp>
-
-#include <lutok/lutok.hpp>
+﻿#include <lutok/lutok.hpp>
 
 #include "example_object.hpp"
 

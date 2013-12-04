@@ -232,6 +232,7 @@ static int
 	lutok::state state = lutok::state_c_gate::connect(raw_state);
 	lutok::cxx_function* function = state.to_userdata< lutok::cxx_function >(
 		state.upvalue_index(1));
+	assert(function);
 	return call_cxx_function_from_c(*function, raw_state);
 }
 

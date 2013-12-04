@@ -1,8 +1,8 @@
 #if !defined(LUTOK_LOBJECT_HPP)
 #define LUTOK_LOBJECT_HPP
 
+#include <cassert>
 #include <string>
-
 #include <utility>
 #include <map>
 
@@ -10,13 +10,14 @@
 #include <string>
 #include <tuple>
 #include <type_traits>
+#include <mutex>
 
 #define LOBJECT_ADD_PROPERTY(CLASSNAME, TYPENAME, LUANAME, GETTER, SETTER) this->properties[(LUANAME)] = LObject<CLASSNAME, TYPENAME>::PropertyPair(&CLASSNAME::GETTER, &CLASSNAME::SETTER)
 #define LOBJECT_ADD_METHOD(CLASSNAME, LUANAME, METHOD) this->methods[(LUANAME)] = &CLASSNAME::METHOD
 #define LOBJECT_ADD_OPERATOR(CLASSNAME, LUAOPERATORNAME) this->methods["operator_"#LUAOPERATORNAME] = &CLASSNAME::operator_##LUAOPERATORNAME
 
 #define LOBJECT_DEFINE_CLASS(CLASSNAME, TYPENAME, LUANAME) CLASSNAME(lutok::state & state) : LObject<CLASSNAME, TYPENAME>::LObject( state, (LUANAME))
-#define LOBJECT_INSTANCE(CLASSNAME) reinterpret_cast<CLASSNAME *>(CLASSNAME::getInstance(state).lock().get());
+#define LOBJECT_INSTANCE(CLASSNAME) (CLASSNAME::getInstance(state))
 #define LOBJECT_METHOD(METHODNAME, TYPEDEF) METHODNAME(lutok::state & state, TYPEDEF)
 #define LOBJECT_OPERATOR(OPERATORNAME, TYPEDEF) operator_##OPERATORNAME(lutok::state & state, TYPEDEF)
 
@@ -24,8 +25,39 @@
 
 namespace lutok {
 
+template <class C>
+class LSingleton {
+public:
+	virtual ~LSingleton() {};
+	static inline C & getInstance(lutok::state & state);
+private:
+	static std::unique_ptr<C> m_instance;
+	static std::once_flag m_onceFlag;
+	LSingleton& operator=(const C& rhs);
+protected:
+	LSingleton(void) {};
+	LSingleton(const C& src) {};
+};
+
+/*
+class LSingleton {
+public:
+	template <class C> static inline C & getInstance(lutok::state & state);
+	virtual ~LSingleton() {};
+private:
+	static std::unique_ptr<LSingleton> m_instance;
+	static std::once_flag m_onceFlag;
+
+	LSingleton& operator=(const LSingleton& rhs);
+protected:
+	LSingleton(void) {};
+	LSingleton(const LSingleton& src) {};
+};
+*/
+
+
 template <class C, typename T>
-class LObject {
+class LObject: public LSingleton<C> {
 protected:
 	lutok::state state;
 public:
@@ -51,6 +83,10 @@ public:
 		return 0;
 	}
 
+	~LObject(){
+
+	}
+
 protected:
 	PropertyType properties;
 	FunctionType methods;
@@ -68,14 +104,7 @@ private:
 		return new LObjectTuple(reinterpret_cast<C*>(this), obj, managed);
 	}
 public:
-	static classWeakPtr getInstance(lutok::state & state){
-		assert((std::is_base_of<LObject, C>::value == true));
-		thread_local static classSharedPtr instance = nullptr;
-		if (instance == nullptr){
-			instance = classSharedPtr(new C(state));
-		}
-		return instance;
-	}
+
 /*
   @ check
   Arguments:
@@ -448,6 +477,30 @@ public:
 	}
 
 };
+/*
+template <class C> C & LSingleton::getInstance(lutok::state & state){
+	assert((std::is_base_of<LSingleton, C>::value == true));
+
+	std::call_once(m_onceFlag,
+		[& state] {
+			m_instance.reset(new C(state));
+	});
+	return dynamic_cast<C &>(*m_instance.get());
+}
+*/
+
+template <class C> std::unique_ptr<C> LSingleton<C>::m_instance;
+template <class C> std::once_flag LSingleton<C>::m_onceFlag;
+
+template <class C> C & LSingleton<C>::getInstance(lutok::state & state){
+	assert((std::is_base_of<LSingleton<C>, C>::value == true));
+
+	std::call_once(m_onceFlag,
+		[& state] {
+			m_instance.reset(new C(state));
+	});
+	return *m_instance.get();
+}
 
 }
 #endif

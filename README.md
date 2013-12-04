@@ -31,9 +31,9 @@ To build and use Lutok successfully you need:
 Examples
 ========
 Examples of use are included in files:
--	example_object.cpp
--	example_object.hpp
--	example_object.lua
+-	example/example_object.cpp
+-	example/example_object.hpp
+-	example/example_object.lua
 
 Authors
 =======

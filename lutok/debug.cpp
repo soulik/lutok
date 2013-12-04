@@ -28,7 +28,7 @@
 
 #include <cassert>
 
-#include <lua.hpp>
+#include <Lua/lua.hpp>
 
 #include <lutok/c_gate.hpp>
 #include <lutok/debug.hpp>

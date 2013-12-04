@@ -1,4 +1,4 @@
-﻿#include <Lua/lua.hpp>
+﻿#include <lua/lua.hpp>
 
 #include <lutok/lutok.hpp>
 

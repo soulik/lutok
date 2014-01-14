@@ -1103,3 +1103,39 @@ const int lutok::state::type(int i){
 void lutok::state::xmove(lutok::state target, int n){
 	lua_xmove(_pimpl->lua_state, target._pimpl->lua_state, n);
 }
+
+template<> double lutok::state::get_array<double>(const int table_index, const int index){
+	lua_pushinteger(_pimpl->lua_state, index);
+	lua_gettable(_pimpl->lua_state, table_index);
+	double result = lua_tonumber(_pimpl->lua_state, -1);
+	lua_pop(_pimpl->lua_state, 1);
+	return result;
+}
+template<> float lutok::state::get_array<float>(const int table_index, const int index){
+	lua_pushinteger(_pimpl->lua_state, index);
+	lua_gettable(_pimpl->lua_state, table_index);
+	float result = lua_tonumber(_pimpl->lua_state, -1);
+	lua_pop(_pimpl->lua_state, 1);
+	return result;
+}
+template<> int lutok::state::get_array<int>(const int table_index, const int index){
+	lua_pushinteger(_pimpl->lua_state, index);
+	lua_gettable(_pimpl->lua_state, table_index);
+	int result = lua_tointeger(_pimpl->lua_state, -1);
+	lua_pop(_pimpl->lua_state, 1);
+	return result;
+}
+template<> bool lutok::state::get_array<bool>(const int table_index, const int index){
+	lua_pushinteger(_pimpl->lua_state, index);
+	lua_gettable(_pimpl->lua_state, table_index);
+	bool result = lua_toboolean(_pimpl->lua_state, -1);
+	lua_pop(_pimpl->lua_state, 1);
+	return result;
+}
+template<> std::string lutok::state::get_array<std::string>(const int table_index, const int index){
+	lua_pushinteger(_pimpl->lua_state, index);
+	lua_gettable(_pimpl->lua_state, table_index);
+	const char *raw_string = lua_tostring(_pimpl->lua_state, -1);
+	lua_pop(_pimpl->lua_state, 1);
+	return std::string(raw_string);
+}

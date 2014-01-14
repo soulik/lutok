@@ -154,6 +154,7 @@ public:
 	void set_field(const std::string& name, const bool value, const int index=-3);
 	void set_field(const int index, const std::string& name);
 	void get_field(const int index, const std::string& name);
+	template<typename T> T get_array(const int table_index, const int index);
 	
 	void push_number(const double value);
 	const double to_number(const int);

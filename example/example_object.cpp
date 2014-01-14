@@ -17,8 +17,21 @@ namespace Example {
 	}
 
 	int LuaExampleObject::LOBJECT_METHOD(doSomething2, ExampleObject * object){
+		void * userData = (void*)123456789;
+		state.push_boolean(true);
+		state.push_integer(12345);
+		state.push_number(12345.6789);
 		state.push_string("Something has to be done here too!");
-		return 1;
+		state.push_lightuserdata(userData);
+		state.new_table();
+			state.set_field("number", (lua_Number)12345.6789);
+			state.set_field("integer", (int)12345);
+			state.set_field("string", "A text");
+			state.set_field("boolean", false);
+			state.push_lightuserdata(userData);
+			state.set_field(-2, "userData");
+		state.to_integer();
+		return 6;
 	}
 
 	void init_exampleObject(lutok::state & state, moduleDef & module){

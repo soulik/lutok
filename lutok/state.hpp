@@ -89,6 +89,7 @@ class state {
     void* check_userdata_voidp(const int narg, const std::string& name);
 
     friend class state_c_gate;
+	friend class Buffer;
 	template <class T> friend class Luna;
 
     void* raw_state(void);
@@ -131,10 +132,12 @@ public:
     void push_integer(const int);
     void push_nil(void);
     void push_string(const std::string&);
+	void push_lstring(const char *, size_t);
 	void push_literal(const std::string&);
     void push_value(const int = -1);
     void raw_get(const int = -2);
     void raw_set(const int = -3);
+	void concat(const int);
     void set_global(const std::string&);
     void set_metatable(const int = -2);
     void set_table(const int = -3);

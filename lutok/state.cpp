@@ -742,6 +742,10 @@ lutok::state::push_string(const std::string& str)
     lua_pushstring(_pimpl->lua_state, str.c_str());
 }
 
+void lutok::state::push_lstring(const char * str, size_t len){
+	lua_pushlstring(_pimpl->lua_state, str, len);
+}
+
 void
 lutok::state::push_literal(const std::string& str)
 {
@@ -780,6 +784,10 @@ lutok::state::raw_set(const int index)
     lua_rawset(_pimpl->lua_state, index);
 }
 
+
+void lutok::state::concat(const int n){
+	lua_concat(_pimpl->lua_state, n);
+}
 
 /// Wrapper around lua_setglobal.
 ///

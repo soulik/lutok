@@ -972,6 +972,32 @@ void lutok::state::push_userdata(const void * data, const std::string& name){
     lua_remove( _pimpl->lua_state, -2 );
 }
 
+void lutok::state::push_userdata(const void * data){
+	luaL_getmetatable(_pimpl->lua_state, "lua_userdata");
+
+	if(!is_table()){
+		// create new weak table
+		luaL_newmetatable( _pimpl->lua_state, "lua_userdata" );
+		push_string("v");
+		lua_setfield( _pimpl->lua_state, -2, "__mode" );
+	}
+	lua_pushlightuserdata(_pimpl->lua_state, (void*)data);
+	lua_gettable(_pimpl->lua_state, -2);
+	if( is_userdata())
+		return lua_remove( _pimpl->lua_state, -2 );
+
+	pop(1);// didnt exist yet - getfield is nil -> need to pop that
+
+
+	void * userdata = lua_newuserdata(_pimpl->lua_state, sizeof(void *));
+	*reinterpret_cast<void **>( userdata ) = (void *)( data );
+
+	lua_pushlightuserdata(_pimpl->lua_state, (void*)data); //key
+	this->push_value(-2); //value
+	lua_settable(_pimpl->lua_state, -4);
+	lua_remove( _pimpl->lua_state, -2 );
+}
+
 void lutok::state::set_field(const std::string& name, const lua_Number value, const int index){
 	push_literal(name);
 	push_number(value);

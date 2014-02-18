@@ -150,6 +150,7 @@ public:
 	void findLib(const std::string& name, const int size, const int nup=0);
 	void push_lightuserdata(void *);
 	void push_userdata(const void *, const std::string& name);
+	void push_userdata(const void *);
 
 	void set_field(const std::string& name, const double value, const int index=-3);
 	void set_field(const std::string& name, const int value, const int index=-3);

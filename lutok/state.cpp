@@ -557,6 +557,10 @@ lutok::state::new_table(void)
 }
 
 
+void * lutok::state::new_thread(void){
+	return lua_newthread(_pimpl->lua_state);
+}
+
 /// Wrapper around lua_newuserdata.
 ///
 /// This is internal.  The public type-safe interface of this method should be
@@ -784,7 +788,6 @@ lutok::state::raw_set(const int index)
     lua_rawset(_pimpl->lua_state, index);
 }
 
-
 void lutok::state::concat(const int n){
 	lua_concat(_pimpl->lua_state, n);
 }
@@ -973,6 +976,7 @@ void lutok::state::push_userdata(const void * data, const std::string& name){
 }
 
 void lutok::state::push_userdata(const void * data){
+	//cache table for: data_address -> full userdata pairs
 	luaL_getmetatable(_pimpl->lua_state, "lua_userdata");
 
 	if(!is_table()){
@@ -981,21 +985,38 @@ void lutok::state::push_userdata(const void * data){
 		push_string("v");
 		lua_setfield( _pimpl->lua_state, -2, "__mode" );
 	}
-	lua_pushlightuserdata(_pimpl->lua_state, (void*)data);
-	lua_gettable(_pimpl->lua_state, -2);
-	if( is_userdata())
-		return lua_remove( _pimpl->lua_state, -2 );
-
-	pop(1);// didnt exist yet - getfield is nil -> need to pop that
-
-
-	void * userdata = lua_newuserdata(_pimpl->lua_state, sizeof(void *));
-	*reinterpret_cast<void **>( userdata ) = (void *)( data );
 
 	lua_pushlightuserdata(_pimpl->lua_state, (void*)data); //key
-	this->push_value(-2); //value
-	lua_settable(_pimpl->lua_state, -4);
-	lua_remove( _pimpl->lua_state, -2 );
+	lua_gettable(_pimpl->lua_state, -2); //lua_userdata[key]
+	if( is_userdata()){ //is userdata cached?
+		lua_remove( _pimpl->lua_state, -2 ); //remove metatable from stack
+		return;
+	}else{
+		pop(1);// didn't exist yet - getfield is nil -> need to pop that
+		/*
+			1 - lua_userdata
+		*/
+		void * userdata = lua_newuserdata(_pimpl->lua_state, sizeof(void *));
+		*reinterpret_cast<void **>( userdata ) = (void *)( data );
+		/*
+			1 - lua_userdata
+			2 - full userdata
+		*/
+		lua_pushlightuserdata(_pimpl->lua_state, (void*)data); //key
+		this->push_value(-2); //value
+		/*
+			1 - lua_userdata
+			2 - full userdata
+			3 - light user data
+			4 - full userdata
+		*/
+		lua_settable(_pimpl->lua_state, -4);
+		/*
+			1 - lua_userdata
+			2 - full userdata
+		*/
+		lua_remove( _pimpl->lua_state, -2 );
+	}
 }
 
 void lutok::state::set_field(const std::string& name, const lua_Number value, const int index){
@@ -1136,6 +1157,14 @@ const int lutok::state::type(int i){
 
 void lutok::state::xmove(lutok::state target, int n){
 	lua_xmove(_pimpl->lua_state, target._pimpl->lua_state, n);
+}
+
+int lutok::state::resume(const int nargs){
+	return lua_resume(_pimpl->lua_state, nargs);
+}
+
+int lutok::state::yield(const int nargs){
+	return lua_yield(_pimpl->lua_state, nargs);
 }
 
 template<> double lutok::state::get_array<double>(const int table_index, const int index){

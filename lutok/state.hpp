@@ -120,6 +120,7 @@ public:
     void load_string(const std::string&);
     void new_table(void);
     template< typename Type > Type* new_userdata(void);
+	void * new_thread(void);
     bool next(const int = -2);
     void open_base(void);
     void open_string(void);
@@ -137,6 +138,7 @@ public:
     void push_value(const int = -1);
     void raw_get(const int = -2);
     void raw_set(const int = -3);
+	
 	void concat(const int);
     void set_global(const std::string&);
     void set_metatable(const int = -2);
@@ -188,6 +190,8 @@ public:
 	const int type(int);
 
 	void xmove(state target, int n);
+	int resume(const int nargs = 0);
+	int yield(const int nargs = 0);
 
 };
 

@@ -955,6 +955,7 @@ void lutok::state::push_userdata(const void * data, const std::string& name){
 	luaL_getmetatable(_pimpl->lua_state, "lua_userdata");
 	
 	if(!is_table()){
+		lua_pop(_pimpl->lua_state, 1);
         // create new weak table
         luaL_newmetatable( _pimpl->lua_state, "lua_userdata" );
 		push_string("v");
@@ -980,6 +981,8 @@ void lutok::state::push_userdata(const void * data){
 	luaL_getmetatable(_pimpl->lua_state, "lua_userdata");
 
 	if(!is_table()){
+		lua_pop(_pimpl->lua_state, 1);
+
 		// create new weak table
 		luaL_newmetatable( _pimpl->lua_state, "lua_userdata" );
 		push_string("v");
@@ -988,6 +991,7 @@ void lutok::state::push_userdata(const void * data){
 
 	lua_pushlightuserdata(_pimpl->lua_state, (void*)data); //key
 	lua_gettable(_pimpl->lua_state, -2); //lua_userdata[key]
+	
 	if( is_userdata()){ //is userdata cached?
 		lua_remove( _pimpl->lua_state, -2 ); //remove metatable from stack
 		return;

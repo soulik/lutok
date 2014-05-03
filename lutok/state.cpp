@@ -905,6 +905,24 @@ lutok::state::to_string(const int index)
     return std::string(raw_string);
 }
 
+/// Wrapper around lua_tostring.
+///
+/// \param index The second parameter to lua_tostring.
+///
+/// \return The return value of lua_tostring.
+///
+/// \warning Terminates execution if there is not enough memory.
+std::string
+	lutok::state::to_lstring(const int index)
+{
+	assert(is_string(index));
+	size_t len = 0;
+	const char *raw_string = lua_tolstring(_pimpl->lua_state, index, &len);
+	// Note that the creation of a string object below (explicit for clarity)
+	// implies that the raw string is duplicated and, henceforth, the string is
+	// safe even if the corresponding element is popped from the Lua stack.
+	return std::string(raw_string, len);
+}
 
 /// Wrapper around lua_upvalueindex.
 ///

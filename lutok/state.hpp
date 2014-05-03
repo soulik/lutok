@@ -147,6 +147,7 @@ public:
     long to_integer(const int = -1);
     template< typename Type > Type* to_userdata(const int = -1);
     std::string to_string(const int = -1);
+	std::string to_lstring(const int = -1);
     int upvalue_index(const int);
 
 	void findLib(const std::string& name, const int size, const int nup=0);

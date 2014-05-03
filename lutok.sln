@@ -8,15 +8,20 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
+		Release - wo msvcrt DLL|Win32 = Release - wo msvcrt DLL|Win32
 		Release|Win32 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0D955293-AA93-418D-A0FA-B6F1BBC49277}.Debug|Win32.ActiveCfg = Debug|Win32
 		{0D955293-AA93-418D-A0FA-B6F1BBC49277}.Debug|Win32.Build.0 = Debug|Win32
+		{0D955293-AA93-418D-A0FA-B6F1BBC49277}.Release - wo msvcrt DLL|Win32.ActiveCfg = Release - wo msvcrt DLL|Win32
+		{0D955293-AA93-418D-A0FA-B6F1BBC49277}.Release - wo msvcrt DLL|Win32.Build.0 = Release - wo msvcrt DLL|Win32
 		{0D955293-AA93-418D-A0FA-B6F1BBC49277}.Release|Win32.ActiveCfg = Release|Win32
 		{0D955293-AA93-418D-A0FA-B6F1BBC49277}.Release|Win32.Build.0 = Release|Win32
 		{9EA09FD3-9E41-450E-8471-334458A652AD}.Debug|Win32.ActiveCfg = Debug|Win32
 		{9EA09FD3-9E41-450E-8471-334458A652AD}.Debug|Win32.Build.0 = Debug|Win32
+		{9EA09FD3-9E41-450E-8471-334458A652AD}.Release - wo msvcrt DLL|Win32.ActiveCfg = Release - wo msvcrt DLL|Win32
+		{9EA09FD3-9E41-450E-8471-334458A652AD}.Release - wo msvcrt DLL|Win32.Build.0 = Release - wo msvcrt DLL|Win32
 		{9EA09FD3-9E41-450E-8471-334458A652AD}.Release|Win32.ActiveCfg = Release|Win32
 		{9EA09FD3-9E41-450E-8471-334458A652AD}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection

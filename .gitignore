@@ -5,7 +5,11 @@
 *.user
 Debug/*
 Release/*
+Release - wo msvcrt DLL/*
 lutok/Debug/*
 lutok/Release/*
+lutok/Release - wo msvcrt DLL/*
 example/Debug/*
 example/Release/*
+example/Release - wo msvcrt DLL/*
+

@@ -1082,6 +1082,10 @@ void lutok::state::remove(const int index){
 	lua_remove(_pimpl->lua_state, index);
 }
 
+void lutok::state::replace(const int index){
+	lua_replace(_pimpl->lua_state, index);
+}
+
 bool lutok::state::new_metatable(const std::string& name){
 	return (luaL_newmetatable(_pimpl->lua_state, name.c_str()) == 1);
 }

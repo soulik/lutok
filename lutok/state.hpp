@@ -167,6 +167,7 @@ public:
 	const double to_number(const int);
 
 	void remove(const int);
+	void replace(const int);
 
 	bool new_metatable(const std::string&);
 	void get_metatable(const std::string&);

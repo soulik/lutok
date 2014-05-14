@@ -14,7 +14,13 @@ namespace lutok {
 	void Buffer::addstring(std::string & str){
 		luaL_addstring(&buffer, str.c_str());
 	}
+	void Buffer::addvalue(){
+		luaL_addvalue(&buffer);
+	}
 	void Buffer::push(){
+		luaL_pushresult(&buffer);
+	}
+	void Buffer::clear(){
 		luaL_pushresult(&buffer);
 	}
 };

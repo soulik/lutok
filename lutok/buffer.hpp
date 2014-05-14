@@ -14,7 +14,9 @@ namespace lutok {
 		void putchar(char ch);
 		void addlstring(const char * str, size_t len);
 		void addstring(std::string & str);
+		void addvalue();
 		void push();
+		void clear();
 	};
 };
 

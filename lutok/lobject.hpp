@@ -6,7 +6,7 @@
 #include <utility>
 #include <map>
 
-#include <lua/lua.hpp>
+#include <lua.hpp>
 #include <string>
 #include <tuple>
 #include <type_traits>
@@ -139,7 +139,7 @@ public:
 
 	void refresh_methods(int metatable = 0){
 		int i=0, index=0;
-		for (PropertyType::const_iterator							// Register some properties in it
+		for (typename PropertyType::const_iterator							// Register some properties in it
 			iter = properties.begin(); iter != properties.end(); iter++) {
 
 			state.push_string((*iter).first);
@@ -150,7 +150,7 @@ public:
 		}
 
 		i=0;
-		for (FunctionType::const_iterator							// Register some functions in it
+		for (typename FunctionType::const_iterator							// Register some functions in it
 			iter = methods.begin(); iter != methods.end(); iter++) {
 			index = i | ( 1 << 8 );
 			state.push_string((*iter).first);

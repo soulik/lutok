@@ -3,6 +3,8 @@
 *.suo
 *.opensdf
 *.user
+*.a
+*.so
 Debug/*
 Release/*
 Release - wo msvcrt DLL/*
@@ -12,4 +14,10 @@ lutok/Release - wo msvcrt DLL/*
 example/Debug/*
 example/Release/*
 example/Release - wo msvcrt DLL/*
-
+CMakeCache.txt
+CMakeFiles/*
+CPackConfig.cmake
+CPackSourceConfig.cmake
+cmake_install.cmake
+cmake_install.cmake
+Makefile

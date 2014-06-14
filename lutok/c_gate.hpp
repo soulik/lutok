@@ -32,7 +32,7 @@
 #if !defined(LUTOK_C_GATE_HPP)
 #define LUTOK_C_GATE_HPP
 
-#include <Lua/lua.hpp>
+#include <lua.hpp>
 
 namespace lutok {
 

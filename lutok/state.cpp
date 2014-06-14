@@ -28,10 +28,12 @@
 
 #ifdef _WIN32
     #include <io.h>
+    #define ACCESS_FN _access
 #else
     extern "C" {
 		#include <unistd.h>
 	}
+    #define ACCESS_FN access
 #endif
 
 #include <cassert>
@@ -525,7 +527,7 @@ lutok::state::is_userdata(const int index)
 void
 lutok::state::load_file(const std::string& file)
 {
-    if (!::_access(file.c_str(), 4) == 0)
+    if (!::ACCESS_FN(file.c_str(), 4) == 0)
         throw lutok::file_not_found_error(file);
     if (luaL_loadfile(_pimpl->lua_state, file.c_str()) != 0)
         throw lutok::api_error::from_stack(*this, "luaL_loadfile");
@@ -1193,38 +1195,42 @@ int lutok::state::yield(const int nargs){
 	return lua_yield(_pimpl->lua_state, nargs);
 }
 
-template<> double lutok::state::get_array<double>(const int table_index, const int index){
+namespace lutok {
+
+template<> double state::get_array<double>(const int table_index, const int index){
 	lua_pushinteger(_pimpl->lua_state, index);
 	lua_gettable(_pimpl->lua_state, table_index);
 	double result = lua_tonumber(_pimpl->lua_state, -1);
 	lua_pop(_pimpl->lua_state, 1);
 	return result;
 }
-template<> float lutok::state::get_array<float>(const int table_index, const int index){
+template<> float state::get_array<float>(const int table_index, const int index){
 	lua_pushinteger(_pimpl->lua_state, index);
 	lua_gettable(_pimpl->lua_state, table_index);
 	float result = lua_tonumber(_pimpl->lua_state, -1);
 	lua_pop(_pimpl->lua_state, 1);
 	return result;
 }
-template<> int lutok::state::get_array<int>(const int table_index, const int index){
+template<> int state::get_array<int>(const int table_index, const int index){
 	lua_pushinteger(_pimpl->lua_state, index);
 	lua_gettable(_pimpl->lua_state, table_index);
 	int result = lua_tointeger(_pimpl->lua_state, -1);
 	lua_pop(_pimpl->lua_state, 1);
 	return result;
 }
-template<> bool lutok::state::get_array<bool>(const int table_index, const int index){
+template<> bool state::get_array<bool>(const int table_index, const int index){
 	lua_pushinteger(_pimpl->lua_state, index);
 	lua_gettable(_pimpl->lua_state, table_index);
 	bool result = lua_toboolean(_pimpl->lua_state, -1);
 	lua_pop(_pimpl->lua_state, 1);
 	return result;
 }
-template<> std::string lutok::state::get_array<std::string>(const int table_index, const int index){
+template<> std::string state::get_array<std::string>(const int table_index, const int index){
 	lua_pushinteger(_pimpl->lua_state, index);
 	lua_gettable(_pimpl->lua_state, table_index);
 	const char *raw_string = lua_tostring(_pimpl->lua_state, -1);
 	lua_pop(_pimpl->lua_state, 1);
 	return std::string(raw_string);
+}
+
 }

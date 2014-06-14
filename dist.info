@@ -1,0 +1,14 @@
+--- This file is part of LuaDist project
+
+name = "lutok"
+version = "1.0"
+
+url = "https://github.com/soulik/lutok"
+author = "Mário Kašuba"
+desc = "Lua C++ wrapper."
+license = "GPL"
+maintainer = "Mário Kašuba"
+
+depends = {
+	"lua ~> 5.1",
+}

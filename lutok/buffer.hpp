@@ -2,7 +2,7 @@
 #define LUTOK_BUFFER_HPP
 
 #include "state.hpp"
-#include <lua/lua.hpp>
+#include <lua.hpp>
 #include <string>
 
 namespace lutok {

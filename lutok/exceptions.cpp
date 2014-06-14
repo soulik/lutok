@@ -28,7 +28,7 @@
 
 #include <cassert>
 
-#include <Lua/lua.hpp>
+#include <lua.hpp>
 
 #include "c_gate.hpp"
 #include "exceptions.hpp"

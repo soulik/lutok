@@ -5,10 +5,11 @@
 #include <cassert>
 #include <string>
 #include <exception>
-#include <map>
+#include <unordered_map>
 #include <utility>
 #include <functional>
 #include <tuple>
 #include <type_traits>
+#include <typeinfo>
 
 #endif
